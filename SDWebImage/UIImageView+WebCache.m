@@ -54,17 +54,22 @@ static char operationKey;
         __weak UIImageView *wself = self;
         id<SDWebImageOperation> operation = [SDWebImageManager.sharedManager downloadWithURL:url options:options progress:progressBlock completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
         {
+          // MODIFIED(gmurray): 06/08/13
+          // Based on pull request: https://github.com/rs/SDWebImage/pull/403
+          if (!wself) return;
+          dispatch_async(dispatch_get_main_queue(), ^{
             __strong UIImageView *sself = wself;
             if (!sself) return;
             if (image)
             {
-                sself.image = image;
-                [sself setNeedsLayout];
+              sself.image = image;
+              [sself setNeedsLayout];
             }
             if (completedBlock && finished)
             {
-                completedBlock(image, error, cacheType);
+              completedBlock(image, error, cacheType);
             }
+          });
         }];
         objc_setAssociatedObject(self, &operationKey, operation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
