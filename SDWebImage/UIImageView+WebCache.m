@@ -57,19 +57,19 @@ static char operationKey;
           // MODIFIED(gmurray): 06/08/13
           // Based on pull request: https://github.com/rs/SDWebImage/pull/403
           if (!wself) return;
-          dispatch_async(dispatch_get_main_queue(), ^{
-            __strong UIImageView *sself = wself;
-            if (!sself) return;
-            if (image)
-            {
-              sself.image = image;
-              [sself setNeedsLayout];
-            }
+//          dispatch_async(dispatch_get_main_queue(), ^{
+//            __strong UIImageView *sself = wself;
+//            if (!sself) return;
+//            if (image)
+//            {
+//              sself.image = image;
+//              [sself setNeedsLayout];
+//            }
             if (completedBlock && finished)
             {
               completedBlock(image, error, cacheType);
             }
-          });
+//          });
         }];
         objc_setAssociatedObject(self, &operationKey, operation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
